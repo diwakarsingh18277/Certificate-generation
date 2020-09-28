@@ -2,6 +2,7 @@
 
 from PIL import Image, ImageDraw, ImageFont
 from datetime import datetime
+import pandas as pd
 
 def generateCertifcate(template, target, name, course):
 	try:
@@ -13,6 +14,7 @@ def generateCertifcate(template, target, name, course):
 		# Thereafter, operations performed by the pen
 		# will render on the canvas
 		pen = ImageDraw.Draw(canvas)
+
 
 		#more attributes
 		fnt = ImageFont.truetype(font='arial.ttf', size=40)
@@ -39,7 +41,7 @@ def generateCertifcate(template, target, name, course):
 		pen.text(xy= (course_center[0]-reqd_size[0]/2, course_center[1]- reqd_size[1]),text=course, font=fnt, fill=fg_color)
 
 		#write date
-		pen.text(xy=(405,760), text=month, font=fnt, fill=fg_color)
+		pen.text(xy=(403,760), text=month, font=fnt, fill=fg_color)
 		pen.text(xy=(265,760), text=day, font=fnt, fill=fg_color)
 		pen.text(xy=(497,760), text=year, font=fnt, fill=fg_color)
 
@@ -49,4 +51,11 @@ def generateCertifcate(template, target, name, course):
 	except:
 		print('Certificate Creation Failed')
 
-generateCertifcate('D:\images\certificate.jpg', 'new_certificate.jpg', 'Diwakar Singh', 'Python for Everybody')
+data = pd.read_excel(r'C:\Users\Diwakar Singh\Documents\Certificate generation\Book1.xlsx')
+name_list = data["Name"].tolist()
+course_list = data["Course"].tolist()
+final_list = list(zip(name_list,course_list))
+
+
+for i,j in final_list:
+	generateCertifcate(r'C:\Users\Diwakar Singh\Documents\Certificate generation\certificate.jpg', i +"'s " + j + ' certificate.jpg', i, j)
